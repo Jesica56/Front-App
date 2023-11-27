@@ -1,6 +1,6 @@
 import { Task } from '../types/Task';
 
-const BASE_URL = "https://back-task-7plp.onrender.com";
+const BASE_URL = "https://back-task-7plp.onrender.com/tasks";
 
 export const TaskService = {
 //obtener todas las tareas
