@@ -1,69 +1,72 @@
+import { Container, Nav, NavDropdown, Navbar } from "react-bootstrap";
+import { Basket, Person } from "react-bootstrap-icons";
+import { useNavigate } from "react-router-dom";
+
 import { useState } from "react";
-import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
-import { Basket, Person } from "react-bootstrap-icons"
-import { Navigate, useNavigate } from "react-router-dom";
-import { TaskService } from "../../Services/TaskService";
-import { toast } from "react-toastify";
 import { Task } from "../../types/Task";
+
+import { toast } from "react-toastify";
+import { TaskService } from "../../Services/TaskService";
 import ModalAgregarTarea from "../ModalAgregarTarea/ModalAgregartarea";
 
-
 const NavBar = () => {
-    const navigate = useNavigate();
+
+    const Navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
+  
     
-    const handleShowModal = () =>{
+    const navigate = useNavigate();
+    
+    const handleShowModal = () => {
       setShowModal(true);
     };
-
-    const handleCloseModal = () =>{
+  
+    const handleCloseModal = () => {
       setShowModal(false);
     };
 
-    //Agregar una nueva tarea
-    const createTask = async (newTask: Task) => {
-      try{
-        const result = await TaskService.createTask(newTask);
-        console.log('Nueva tarea agregada: ', result.id);
-        navigate(`/datalle/${result.id}`); //Ir al detalle de la tarea creada
+    
+    //Agregar nueva tarea
+const createTask = async (newTask: Task) => {
+  try {
+    const result = await TaskService.createTask(newTask);
+    console.log('Nueva tarea agregada:', result.id);
+    navigate(`/detalle/${result.id}`); //Ir al detalle de la tarea creada
 
-        //Muestra una notificacion de exito utilizando react-toastify
-        toast.success('Tarea creada correctamente ',{
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 2000,
+    // Muestra una notificación de éxito utilizando react-toastify
+    toast.success('Tarea creada correctamente', {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 2000, // Cerrar automáticamente después de 2 segundos
+    });
+  } catch (error) {
+    // Muestra una notificación de error si la creación de la tarea falla
+    toast.error('Error al crear la tarea', {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 2000,
+    });
+    console.error('Error al crear la tarea:', error);
+  }
+};
 
-        });
-      } catch(error){
-        //muestra una notificacion de error si la creacion de la tarea falla
-        toast.error('Error al crear la tarea',{
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 2000,
-        });
-      
-      
-
-        console.error('Error al crear la tarea: ', error);
-        
-      }
-    };
+    
   
-  
+
   return (
+
     <>
-      <Navbar expand="lg" className="bg-body-tertiary">
-        <Container>
-          <Navbar.Brand>Desarrollo en Argentina</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
+    <Navbar expand="lg" className="bg-body-tertiary">
+      <Container>
+        <Navbar.Brand >Desarrollo en Argentina</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
 
-            <Nav className="me-auto">
-            <Nav.Link onClick={() => Navigate('/')}> Inicio </Nav.Link>
+          <Nav className="me-auto">
+          <Nav.Link onClick={() => Navigate('/')}> Inicio </Nav.Link>
 
-
-              <NavDropdown title="Tareas" id="basic-nav-dropdown">
+            <NavDropdown title="Tareas" id="basic-nav-dropdown">
               <NavDropdown.Item onClick={() => navigate('/PORHACER')}>Por hacer</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">
-                En produccion
+                En producción
               </NavDropdown.Item>
               <NavDropdown.Item href="#action/3.3">Por testear</NavDropdown.Item>
               <NavDropdown.Divider />
@@ -71,39 +74,43 @@ const NavBar = () => {
                 Completada
               </NavDropdown.Item>
             </NavDropdown>
-              {/*-----Agregar una nueva tarea------- */}
-              <Nav.Link onClick={handleShowModal}>Agregar Tarea</Nav.Link>
 
-            </Nav>
+            {/* ------- Agregar una nueva tarea -------*/}
+            <Nav.Link onClick={handleShowModal}>Agregar tarea</Nav.Link>
+          </Nav>
 
-            <Nav className="d-none d-md-flex ms-auto">
-              <Nav.Link href="#carrito">
+        <Nav className="d-none d-md-flex ms-auto">
+            <Nav.Link href="#carrito">
                 <Basket />
-              </Nav.Link>
+            </Nav.Link>
 
-              <Nav.Link href="#usuario">
+            <Nav.Link href="#usuario">
                 <Person />
-              </Nav.Link>
-            </Nav>
+            </Nav.Link>
+        </Nav>
 
-            <div className="d-md-none">
-              <ul className="navbar-nav me-auto-mb-2 mb-md-0">
+        <div className="d-md-none">
+            <ul className="navbar-nav me-auto-mb-2 mb-md-0">
                 <li className="nav-item">
-                  <a className="nav-link" href="#ticket">Ticket</a>
+                    <a className="nav-link" href="#ticket">Ticket</a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#perfil">Perfil</a>
+                    <a className="nav-link" href="#perfil">Perfil</a>
                 </li>
-              </ul>
-            </div>
+            </ul>
+        </div>
 
 
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-      <ModalAgregarTarea showModal={showModal} handleClose={handleCloseModal}
-      createTask={createTask}/>
+        </Navbar.Collapse>
+      </Container>
+      
+    </Navbar>
+    <ModalAgregarTarea showModal={showModal} handleClose={handleCloseModal} createTask={createTask} />
     </>
+    
+    
+    
   );
 };
+
 export default NavBar;
